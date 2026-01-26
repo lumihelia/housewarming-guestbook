@@ -109,8 +109,8 @@
                             const newMsg = payload.new;
                             this.messages.unshift({
                                 id: newMsg.id,
-                                name: newMsg.名字,
-                                text: newMsg.信息,
+                                name: newMsg.name,
+                                text: newMsg.message,
                                 created_at: newMsg.created_at
                             });
                             // 滾動到頂部
@@ -128,8 +128,8 @@
                     if (!error && data) {
                         this.messages = data.map(row => ({
                             id: row.id,
-                            name: row.名字,
-                            text: row.信息,
+                            name: row.name,
+                            text: row.message,
                             created_at: row.created_at
                         }));
                     }
@@ -140,11 +140,11 @@
                     if (!this.newName.trim() || !this.newText.trim()) return;
                     this.sending = true;
 
-                    // 寫入 Supabase (使用中文欄位名)
+                    // 寫入 Supabase (使用英文欄位名)
                     const { error } = await supabase
                         .from('guestbook')
                         .insert([
-                            { '名字': this.newName, '信息': this.newText }
+                            { name: this.newName, message: this.newText }
                         ]);
 
                     if (!error) {
