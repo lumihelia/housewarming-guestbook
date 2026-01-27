@@ -8,22 +8,23 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- 引入 Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
+    <script defer>
         // 配置 Supabase
         const SUPABASE_URL = 'https://llcclppmxpvelhfqspef.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxsY2NscHBteHB2ZWxoZnFzcGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0NjExMjksImV4cCI6MjA4NTAzNzEyOX0.W90wkhWiRVXyk4KzL_tbKdxO33qb3ji07QZPhw_957I';
 
         let supabase;
 
-        function guestbook() {
-            return {
+        // 使用 Alpine.data() 注册组件，确保正确初始化
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('guestbook', () => ({
                 loadingInitial: true,
                 sending: false,
                 newName: '',
                 newText: '',
                 messages: [],
 
-                async initSupabase() {
+                async init() {
                     supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
                     await this.fetchMessages();
                     supabase
@@ -82,8 +83,8 @@
                     const date = new Date(isoString);
                     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 }
-            }
-        }
+            }));
+        });
     </script>
     <script src="https://unpkg.com/alpinejs" defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap"
@@ -116,7 +117,7 @@
 </head>
 
 <body class="bg-gradient-to-br from-orange-100 via-amber-100 to-yellow-50 min-h-screen text-stone-800"
-    x-data="guestbook()" x-init="initSupabase()">
+    x-data="guestbook">
 
     <!-- Main Container -->
     <div class="max-w-md mx-auto min-h-screen flex flex-col p-6 relative">
